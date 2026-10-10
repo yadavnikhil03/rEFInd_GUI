@@ -1,3 +1,4 @@
+#include "logger.h"
 #include "mainwindow.h"
 #include "platform.h"
 #include "uitranslation.h"
@@ -12,6 +13,9 @@ int main(int argc, char *argv[])
     a.setApplicationName(QStringLiteral("rEFInd_GUI"));
     a.setWindowIcon(QIcon(QStringLiteral(":/UEFI_icon.png")));
     Platform::prepareDataDir();
+
+    Logger::init();
+    Logger::runHealthCheck();
 
     // Saved override from the INI, or the system locale. Translator loading,
     // fallback order, and the qtbase catalogs all live in UiTranslation.

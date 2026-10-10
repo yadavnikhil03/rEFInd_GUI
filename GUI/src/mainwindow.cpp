@@ -7,6 +7,7 @@
 #include "espops/themeconf.h"
 
 #include <QDateTime>
+#include <QDebug>
 #include <QDesktopServices>
 #include <QDir>
 #include <QEvent>
@@ -1058,27 +1059,13 @@ void MainWindow::on_Preview_pushButton_clicked()
     dialog.exec();
 }
 
-// Append one timestamped event (plus optional multi-line detail) to the
-// session-persistent log — most bug reports arrive without the dialog text,
-// so keep a copy the user can attach. English on purpose: it's diagnostics.
 void MainWindow::appendLog(const QString &event, const QString &details)
 {
-    const QString dir = guiConfigDir + QStringLiteral("/logs");
-    QDir().mkpath(dir);
-    const QString path =
-        dir + QLatin1Char('/') + QCoreApplication::applicationName() + QStringLiteral(".log");
-    QFile file(path);
-    if (file.size() > 512 * 1024) {
-        // Single rotation keeps the pair bounded at ~1 MB.
-        QFile::remove(path + QStringLiteral(".old"));
-        QFile::rename(path, path + QStringLiteral(".old"));
+    if (details.isEmpty()) {
+        qInfo().noquote() << event;
+    } else {
+        qInfo().noquote() << event << '\n' << details.trimmed();
     }
-    if (!file.open(QIODevice::Append | QIODevice::Text))
-        return;
-    QTextStream out(&file);
-    out << QDateTime::currentDateTime().toString(Qt::ISODate) << ' ' << event << '\n';
-    if (!details.isEmpty())
-        out << details.trimmed() << '\n';
 }
 
 // Dialog-sized excerpt of a script's captured output: PowerShell failures can

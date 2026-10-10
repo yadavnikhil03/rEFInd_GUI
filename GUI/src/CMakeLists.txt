@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(rEFInd_GUI VERSION 3.4.6 LANGUAGES CXX)
+project(rEFInd_GUI VERSION 3.4.7 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -69,6 +69,8 @@ target_include_directories(espops PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(espops PUBLIC ESPOPS_APP_VERSION="${PROJECT_VERSION}")
 
 set(PROJECT_SOURCES
+        logger.cpp
+        logger.h
         main.cpp
         mainwindow.cpp
         mainwindow.h
